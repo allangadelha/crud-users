@@ -1,16 +1,17 @@
 import express from "express";
 import UserController from "../controllers/UserController";
+import { AuthMiddleware } from "../middlewares/auth";
 
 const userRouter = express.Router();
 
-userRouter.get('/users', UserController.findAll);
+userRouter.get('/users', AuthMiddleware, UserController.findAll);
 
-userRouter.get('/users/:id', UserController.findOne);
+userRouter.get('/users/:id', AuthMiddleware, UserController.findOne);
 
-userRouter.post('/users', UserController.create);
+userRouter.post('/users', AuthMiddleware, UserController.create);
 
-userRouter.put('/users/:id', UserController.update);
+userRouter.put('/users/:id', AuthMiddleware, UserController.update);
 
-userRouter.delete('/users/:id', UserController.destroy);
+userRouter.delete('/users/:id', AuthMiddleware, UserController.destroy);
 
 export { userRouter };
