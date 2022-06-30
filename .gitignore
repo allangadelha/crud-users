@@ -1,0 +1,3 @@
+users-backend/node_modules/
+users-backend/dist/
+users-backend/.env/
