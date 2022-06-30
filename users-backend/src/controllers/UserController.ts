@@ -1,5 +1,6 @@
-import { UserModel } from './../database/models/UserModel';
+import { UserModel } from "./../database/models/UserModel";
 import { Request, Response } from "express";
+import { hash } from "bcryptjs"
 
 class UserController {
 
@@ -33,10 +34,21 @@ class UserController {
 
     async create(req:Request, res:Response) {
         const { name, email, password } = req.body;
+        const hash_password = await hash(password, 8);
+        const userExists = await UserModel.findOne({
+            where: {
+                email
+            }
+        });
+
+        if(userExists){
+            return res.status(201).json({ error: "Email já cadastrado"});
+        }
+
         const user = await UserModel.create({
             name,
             email,
-            password
+            password: hash_password
         });
 
         return res.status(201).json({name: name, email: email});

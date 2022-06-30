@@ -6,6 +6,12 @@
         "esModuleInterop": true,
         "skipLibCheck": true,
         "forceConsistentCasingInFileNames": true,
-        "outDir": "./dist"
+        "outDir": "./dist",
+        "typeRoots": [
+            "./src/@types",
+            "./custom_typings",
+            "./@types",
+            "./node_modules/@types"
+        ]
     }
 }
