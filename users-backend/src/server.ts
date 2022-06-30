@@ -1,5 +1,14 @@
-import express from 'express';
+import { db } from './database/db';
+import express, { json } from 'express';
+import { userRouter } from './routes/userRouter';
 
 const app = express();
+const port = process.env.PROJECT_PORT || 3001;
 
-app.listen(3000, () => { console.log(`Rodando ${process.env.PROJECT_NAME} na porta 3000`)});
+app.use(json());
+app.use(userRouter)
+
+app.listen(port, async () => {
+    await db.sync();
+    console.log(`Rodando ${process.env.PROJECT_NAME} na porta ${port}`);
+});
