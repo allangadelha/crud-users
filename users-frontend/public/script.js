@@ -4,7 +4,7 @@ const init = () => {
         const regex = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
         const emailTest = regex.test(input.value);
 
-        if(!emailTest) {
+        if (!emailTest) {
             submitButton.setAttribute("disabled", "disabled");
             input.nextElementSibling.classList.add('error');
         } else {
@@ -16,7 +16,7 @@ const init = () => {
     const validatePassowrd = (event) => {
         const input = event.currentTarget;
 
-        if(input.value.length < 5) {
+        if (input.value.length < 5) {
             submitButton.setAttribute("disabled", "disabled");
             input.nextElementSibling.classList.add('error');
         } else {
@@ -24,7 +24,7 @@ const init = () => {
             input.nextElementSibling.classList.remove('error');
         }
     }
-    
+
     const inputEmail = document.querySelector('input[type="email"]');
     const inputPassword = document.querySelector('input[type="password"]');
     const submitButton = document.querySelector('.login__submit');
@@ -46,7 +46,7 @@ const init = () => {
         submitButton.textContent = "Sent! :)";
     }
 
-    if(submitButton) {
+    if (submitButton) {
         submitButton.addEventListener('click', (event) => {
             event.preventDefault();
 
@@ -62,13 +62,32 @@ const init = () => {
                     password: inputPassword.value,
                 })
             }).then((response) => {
-                console.log('response: ', response);
-                if (response.status !== 200 || response.status !== 201) {
+                if (response.status !== 200 && response.status !== 201) {
                     return errorHandler();
                 }
-                
+                window.localStorage.setItem('token', response.token)
+
+                var token = window.localStorage.getItem('token');
+
+                console.log("Deu certo", token);
                 successHandler();
-                
+                fetch('http://localhost:3001/users', {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': 'Bearer ' + response.token
+                    }
+                }).then((response) => {
+                    if (response.status !== 200 && response.status !== 201) {
+                        return errorHandler();
+                    }
+
+                    successHandler();
+
+                }).catch(() => {
+                    errorHandler();
+                })
+
             }).catch(() => {
                 errorHandler();
             })
