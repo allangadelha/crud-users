@@ -1,5 +1,4 @@
 import express from 'express';
-// import { routers } from './routes/routers';
 
 const app = express();
 const port = 3000;
@@ -9,6 +8,10 @@ app.use(express.static("public"));
 
 routers.get('/', async (req, res) => {
     res.send("Hello word!");
+});
+
+routers.get('/login', async (req, res) => {
+    res.json({teste: "Hello word!"});
 });
 
 

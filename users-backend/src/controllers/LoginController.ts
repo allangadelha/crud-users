@@ -15,15 +15,13 @@ class LoginController {
         });
 
         if(!user) {
-            return res.json({ error: "Usuário não encontrado"});
+            return res.status(404).json({ error: "Usuário não encontrado"});
         }
-
-        console.log("USUARIO: ", typeof password + " || " + typeof user['password']);
 
         const isValuePassword = await compare(password, user['password']);
 
         if(!isValuePassword) {
-            return res.json({ error: "Usuário não encontrado"});
+            return res.status(404).json({ error: "Usuário não encontrado"});
         }
 
         const token = sign({ id: user['id']}, process.env.SECRET, { expiresIn: parseInt(process.env.EXPIRE_TOKEN) });
@@ -33,7 +31,7 @@ class LoginController {
             sucess: "Login efetuado com sucesso", 
             name: user['name'],
             email: user['email'],
-            token: token
+            token
         });
     }
 }
